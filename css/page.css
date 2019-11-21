@@ -75,13 +75,13 @@ ul.cards-list li {
 
 
 .card {
-  width: 140px;
+	width: 140px;
 	height: 190px;
-  position: relative;
-  border-radius: 10px;
+	position: relative;
+	border-radius: 10px;
 
-  transform-style: preserve-3d;
-  transition: all 0.4s, box-shadow 0.1s ease;
+	transform-style: preserve-3d;
+	transition: all 0.4s, box-shadow 0.1s ease;
 }
 .card:not(.is-flipped):hover {
 	box-shadow: 0 0 5px 0px whitesmoke
@@ -124,18 +124,18 @@ ul#cards {
     padding: 0;
 }
 
-.card-container.item {
+.card-container {
 	margin: 2px;
 	/*width: 160px;
 	height: 220px;
 	background-color: blue;*/
 }
-.item .card-content {
+.card-content {
 	position: relative;
     height: 100%;
   border-radius: 12px;
 }
-.item .card-content img {
+ .card-content img {
 	position: absolute;
 	top: 0;
 	left: 10%;

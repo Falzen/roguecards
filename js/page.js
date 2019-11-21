@@ -9,6 +9,18 @@ var cards = [
 		type: 'item',
 		name: 'heal',
 		img_name: 'heal1.png'
+	},
+	{
+		id: 'scroll1',
+		type: 'item',
+		name: 'scroll',
+		img_name: 'scroll1.png'
+	},
+	{
+		id: 'sword1',
+		type: 'equipment',
+		name: 'sword',
+		img_name: 'sword1.png'
 	}
 ];
 
@@ -31,13 +43,31 @@ function cardDomFactory(data) {
 					cardHtml += '<div class="card__face card__face--back">';
 						cardHtml += '<div class="card-content">';
 									cardHtml += '<img src="img/cards_illus/' + data.img_name +'" />';
-									cardHtml += '<p class="name"></p>';
+									cardHtml += '<p class="name">' + data.name + '</p>';
 									cardHtml += '<div class="description"></div>';
 						cardHtml += '</div>';
 					cardHtml += '</div>';
 				cardHtml += '</div>';
 			cardHtml += '</li>';
 		break;
+
+		case 'equipment':
+			cardHtml += '<li class="card-container equipment">';
+				cardHtml += '<div class="card">';
+					cardHtml += '<div class="card__face card__face--front">';
+					cardHtml += '</div>';
+					cardHtml += '<div class="card__face card__face--back">';
+						cardHtml += '<div class="card-content">';
+									cardHtml += '<img src="img/cards_illus/' + data.img_name +'" />';
+									cardHtml += '<p class="name">' + data.name + '</p>';
+									cardHtml += '<div class="description">equipment equipment</div>';
+						cardHtml += '</div>';
+					cardHtml += '</div>';
+				cardHtml += '</div>';
+			cardHtml += '</li>';
+		break;
+
+
 		default:
 		break;
 	}
@@ -50,8 +80,12 @@ function createTable() {
 	var cardsInnerHtml = '';
 
 	for (var i = 0; i < tableSettings.cardSolts; i++) {
-		var oneCard = cardDomFactory(cards[0]);
+		var oneCard = cardDomFactory(cards[getRandomInt(0,cards.length-1)]);
 		cardsInnerHtml += oneCard;
 	}
 	$('#cards').html(cardsInnerHtml);
 }
+
+  function getRandomInt(min, max) {
+  	return Math.floor(Math.random() * (max - min + 1) + min);
+  }
