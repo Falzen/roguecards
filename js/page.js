@@ -21,6 +21,12 @@ var cards = [
 		type: 'equipment',
 		name: 'sword',
 		img_name: 'sword1.png'
+	},
+	{
+		type: 'nothing'
+	},
+	{
+		type: 'nothing'
 	}
 ];
 
@@ -67,6 +73,16 @@ function cardDomFactory(data) {
 			cardHtml += '</li>';
 		break;
 
+		case 'nothing':
+			cardHtml += '<li class="card-container nothing">';
+				cardHtml += '<div class="card">';
+					cardHtml += '<div class="card__face card__face--front">';
+					cardHtml += '</div>';
+					cardHtml += '<div class="card__face card__face--back">';
+						cardHtml += '</div>';
+				cardHtml += '</div>';
+			cardHtml += '</li>';
+		break;
 
 		default:
 		break;

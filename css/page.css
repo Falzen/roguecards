@@ -87,6 +87,10 @@ ul.cards-list li {
 	box-shadow: 0 0 5px 0px whitesmoke
 }
 
+.card-container.nothing .card__face--front {
+		background-color: black;
+}
+
 .card__face {
   height: 100%;
   width: 100%;
