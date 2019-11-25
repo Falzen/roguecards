@@ -1,5 +1,7 @@
 var settings = {
-	hero: {}
+	hero: {},
+	cardsIdCpt: 0,
+	nbCardsInHand: 3
 };
 
 

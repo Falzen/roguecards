@@ -70,6 +70,7 @@ ul.cards-list {
 }
 ul.cards-list li {
   margin: 0 4px;
+  border: 1px solid grey !important;
 }
 
 
@@ -151,4 +152,13 @@ ul#cards {
 }
 .description {
 
+}
+
+
+
+
+#hand_CardsContainer {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
 }
