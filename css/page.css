@@ -73,7 +73,15 @@ ul.cards-list li {
   border: 1px solid grey !important;
 }
 
-
+ul.cards-list li,
+ul.cards-list li img {
+   -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 .card {
 	width: 140px;
@@ -84,7 +92,7 @@ ul.cards-list li {
 	transform-style: preserve-3d;
 	transition: all 0.4s, box-shadow 0.1s ease;
 }
-.card:not(.is-flipped):hover {
+.card:not(.nothing):not(.is-flipped):hover {
 	box-shadow: 0 0 5px 0px whitesmoke
 }
 
@@ -142,9 +150,10 @@ ul#cards {
 }
  .card-content img {
 	position: absolute;
-	top: 0;
+    top: 50px;
 	left: 10%;
 	width: 80%;
+	z-index: -1;
 }
 
 .name {
@@ -154,6 +163,12 @@ ul#cards {
 
 }
 
+.stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 20px;
+    margin: 0;
+}
 
 
 
