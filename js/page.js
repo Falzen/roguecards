@@ -12,7 +12,8 @@ if(!settings) {
 }
 
 var is_enemy_visible = false;
-
+var visibleEnemies = [];
+var floor_level = 1;
 
 console.log('settings : ', settings);
 
@@ -70,6 +71,10 @@ var cardsType_enemies = [
 	},
 ];
 cardsByTypeMap.set('enemies', cardsType_enemies);
+var enemiesByNameMap = new Map();
+for (var i = 0; i < cardsType_enemies.length; i++) {
+	enemiesByNameMap.set(cardsType_enemies[i].name, cardsType_enemies[i]);
+}
 
 var cardsType_weapons = [
 	{
@@ -103,6 +108,11 @@ $(document).ready(function() {
 
 var $hand = $("#hand_CardsContainer");
 
+function newTurnChecks() {
+	if(is_enemy_visible) {
+
+	}
+}
 
 
 function cardsClickListener() {
@@ -111,7 +121,29 @@ function cardsClickListener() {
 		// turn over
         if(!$(this).hasClass("is-flipped")) {
         	$(this).addClass("is-flipped");
+        	// enemy
+        	if($(this).parent().hasClass("enemy")) {
+        		is_enemy_visible = true;
+        		visibleEnemies.push($(this).find('.name')[0].textContent);
+        		console.log('visibleEnemies : ', visibleEnemies);
+        	}
+        	return;
         }
+
+
+    	// exit
+    	else if(
+    		$(this).hasClass("is-flipped")
+    		&& $(this).parent().hasClass("exit")
+		) {
+    		floor_level++;
+    		createTable();
+			cardsClickListener();
+    		alert('floor_level : ' + floor_level);
+        	return;
+    	}
+
+
 
         //take into hand
         else if(
@@ -174,7 +206,7 @@ function cardDomFactory(data, where) {
 	cardsIdCpt++;
 	switch(data.type) {
 		case 'item':
-			cardHtml += '<li id="' + cardsIdCpt + '" class="card-container item">';
+			cardHtml += '<li id="cardid_' + cardsIdCpt + '" class="card-container item">';
 				cardHtml += '<div class="card ' + where;
 				if(where == 'hand') {
 					cardHtml += ' is-flipped';
@@ -194,7 +226,7 @@ function cardDomFactory(data, where) {
 		break;
 		
 		case 'weapon':
-			cardHtml += '<li id="' + cardsIdCpt + '" class="card-container weapon">';
+			cardHtml += '<li id="cardid_' + cardsIdCpt + '" class="card-container weapon">';
 				cardHtml += '<div class="card ' + where;
 				if(where == 'hand') {
 					cardHtml += ' is-flipped';
@@ -214,7 +246,7 @@ function cardDomFactory(data, where) {
 		break;
 
 		case 'equipment':
-			cardHtml += '<li id="' + cardsIdCpt + '" class="card-container equipment">';
+			cardHtml += '<li id="cardid_' + cardsIdCpt + '" class="card-container equipment">';
 				cardHtml += '<div class="card ' + where;
 				if(where == 'hand') {
 					cardHtml += ' is-flipped';
@@ -233,12 +265,8 @@ function cardDomFactory(data, where) {
 		break;
 
 		case 'enemy':
-			cardHtml += '<li id="' + cardsIdCpt + '" class="card-container enemy">';
-				cardHtml += '<div class="card ' + where;
-				if(where == 'hand') {
-					cardHtml += ' is-flipped';
-				}
-				cardHtml += '">';
+			cardHtml += '<li id="cardid_' + cardsIdCpt + '" class="card-container enemy">';
+				cardHtml += '<div class="card ' + where + '">';
 					cardHtml += '<div class="card__face card__face--front">';
 					cardHtml += '</div>';
 					cardHtml += '<div class="card__face card__face--back">';
@@ -254,7 +282,7 @@ function cardDomFactory(data, where) {
 		break;
 
 		case 'exit':
-			cardHtml += '<li id="' + cardsIdCpt + '" class="card-container exit">';
+			cardHtml += '<li id="cardid_' + cardsIdCpt + '" class="card-container exit">';
 				cardHtml += '<div class="card ' + where;
 				if(where == 'hand') {
 					cardHtml += ' is-flipped';
@@ -273,7 +301,7 @@ function cardDomFactory(data, where) {
 		break;
 
 		case 'nothing':
-			cardHtml += '<li id="' + cardsIdCpt + '" class="card-container nothing">';
+			cardHtml += '<li id="cardid_' + cardsIdCpt + '" class="card-container nothing">';
 				cardHtml += '<div class="card ' + where;
 				if(where == 'hand') {
 					cardHtml += ' is-flipped';
@@ -298,6 +326,7 @@ function setStartingData() {
 	$('#name').text(settings.hero.name);
 }
 function createTable() {
+	$('#cards').html('');
 	var cardsInnerHtml = '';
 	var cards = makeCardsToGenerate();
 	for (var i = 0; i < cards.length; i++) {
@@ -315,7 +344,6 @@ function createHand() {
 		var oneCard = cardDomFactory(items[getRandomInt(0,items.length-1)], 'hand');
 		cardsInnerHtml += oneCard;
 	}
-	debugger;
 	var toto = weapons[getRandomInt(0,weapons.length-1)];
 	var temp = cardDomFactory(weapons[getRandomInt(0,weapons.length-1)], 'hand');
 	cardsInnerHtml += temp;
