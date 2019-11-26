@@ -118,6 +118,7 @@ function newTurnChecks() {
 function cardsClickListener() {
 	$(".card:not(.nothing)").click(function () {
 
+
 		// turn over
         if(!$(this).hasClass("is-flipped")) {
         	$(this).addClass("is-flipped");
@@ -156,7 +157,21 @@ function cardsClickListener() {
         	var clickedId = $(this).parent().attr('id');
         	$(this).parent().clone().appendTo($hand);
 	    	$(this).parent().replaceWith('<li id="'+clickedId+'" class="card-container nothing"><div class="card nothing board"><div class="card__face card__face--front"></div><div class="card__face card__face--back"><div class="card-content"></div></div></div></li>');
+	    	return;
     	}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		// Nouveau tour !
+		//check si enemies visibles.
+		if(is_enemy_visible) {
+			// TODO do damage
+			alert('ouch');
+		}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     });
 }
 
