@@ -81,6 +81,8 @@ var cardsType_weapons = [
 		id: 'sword1',
 		type: 'weapon',
 		name: 'sword',
+		attack: 2,
+		health: 2,
 		img_name: 'sword1.png'
 	}
 ];
@@ -117,16 +119,22 @@ function newTurnChecks() {
 
 function cardsClickListener() {
 	$(".card:not(.nothing)").click(function () {
-
-
+		
 		// turn over
         if(!$(this).hasClass("is-flipped")) {
         	$(this).addClass("is-flipped");
         	// enemy
         	if($(this).parent().hasClass("enemy")) {
         		is_enemy_visible = true;
-        		visibleEnemies.push($(this).find('.name')[0].textContent);
+        		visibleEnemies.push({
+        			'id': $(this).parent().attr('id'),
+        			'name': $(this).find('.name')[0].textContent
+        		});
         		console.log('visibleEnemies : ', visibleEnemies);
+        		endOfTurn('just_discovered_new_enemy');
+        	} 
+        	else {
+				endOfTurn();
         	}
         	return;
         }
@@ -141,6 +149,33 @@ function cardsClickListener() {
     		createTable();
 			cardsClickListener();
     		alert('floor_level : ' + floor_level);
+    		endOfTurn();
+        	return;
+    	}
+
+
+		// is FROM hand
+    	else if(
+    		$(this).hasClass("is-flipped")
+    		&& $(this).hasClass("hand")
+		) {
+			// WEAPON
+			if($(this).parent().hasClass("weapon")) {
+				prepareAttack($(this));
+				//doAttack(null, $(this));
+				/*
+				var durability = $(this).find('.health')[0].textContent;
+				if(durability != 0) {
+					alert("attack for " + $(this).find('.attack')[0].textContent);	
+					durability = parseInt(durability) - 1;
+					$(this).find('.health')[0].textContent = durability;
+				}
+				if(durability == 0) {
+					$(this).parent().remove();
+				}
+				*/
+
+			}
         	return;
     	}
 
@@ -153,10 +188,12 @@ function cardsClickListener() {
         	&& !$(this).parent().hasClass("enemy") // is NOT an enemy card
         	&& $(this).hasClass("is-flipped") // is visible
         	&& $hand[0].childNodes.length < 5 // enough room in hand
-    	){
+		){
         	var clickedId = $(this).parent().attr('id');
+        	//TODO $(this).removeClass('board').addClass('in_hand');
         	$(this).parent().clone().appendTo($hand);
 	    	$(this).parent().replaceWith('<li id="'+clickedId+'" class="card-container nothing"><div class="card nothing board"><div class="card__face card__face--front"></div><div class="card__face card__face--back"><div class="card-content"></div></div></div></li>');
+	    	endOfTurn();
 	    	return;
     	}
 
@@ -164,20 +201,59 @@ function cardsClickListener() {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-		// Nouveau tour !
-		//check si enemies visibles.
-		if(is_enemy_visible) {
-			// TODO do damage
-			alert('ouch');
-		}
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     });
 }
 
+function prepareAttack(whatWith) {
+	for (var i = 0; i < visibleEnemies.length; i++) {
+		$('#'+visibleEnemies[i].id)
+			.addClass('is_potential_target')
+			.off('click')
+			.on('click', function(ev) {
+				debugger;
+			doAttack($(this), whatWith);
+		});
+	}
+}
 
+function doAttack(whom, whatWith) {
+	var durability = whatWith.find('.health')[0].textContent;
+	if(durability != 0) {
+		alert("attack for " + whatWith.find('.attack')[0].textContent);	
+		doDamage(whom, whatWith.find('.attack')[0].textContent);
+		durability = parseInt(durability) - 1;
+		whatWith.find('.health')[0].textContent = durability;
+	}
+	if(durability == 0) {
+		whatWith.parent().remove();
+	}
+			
+}
 
+function doDamage(victime, damageAmout) {
+	debugger;
+	var victimeHealth = parseInt(victime.find('.health')[0].textContent);
+	victime.find('.health')[0].textContent = victimeHealth - parseInt(damageAmout);
+}
 
+function endOfTurn() {
+	endOfTurn('nothing_special');
+}
+function endOfTurn(what) {
+	//check si enemies visibles.
+	if(is_enemy_visible) {
+		// TODO do damage
+		for (var i = 0; i < visibleEnemies.length; i++) {
+			if(what == 'just_discovered_new_enemy' && i == visibleEnemies.length-1) {
+				break;
+			}
+			alert('ouch from ' + visibleEnemies[i].name);
+		}
+	}
+}
 
 function makeCardsToGenerate() {
 	var cardsToGenerate = [];
@@ -252,6 +328,7 @@ function cardDomFactory(data, where) {
 					cardHtml += '<div class="card__face card__face--back">';
 						cardHtml += '<div class="card-content">';
 							cardHtml += '<img src="img/cards_illus/' + data.img_name +'" />';
+							cardHtml += '<p class="stats"><span class="attack">' + data.attack + '</span><span class="health">' + data.health + '</span></p>';
 							cardHtml += '<p class="name">' + data.name + '</p>';
 							cardHtml += '<div class="description"></div>';
 						cardHtml += '</div>';
@@ -359,7 +436,7 @@ function createHand() {
 		var oneCard = cardDomFactory(items[getRandomInt(0,items.length-1)], 'hand');
 		cardsInnerHtml += oneCard;
 	}
-	var toto = weapons[getRandomInt(0,weapons.length-1)];
+
 	var temp = cardDomFactory(weapons[getRandomInt(0,weapons.length-1)], 'hand');
 	cardsInnerHtml += temp;
 	

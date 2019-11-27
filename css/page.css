@@ -177,3 +177,7 @@ ul#cards {
     flex-flow: row nowrap;
     justify-content: flex-start;
 }
+
+.is_potential_target {
+	box-shadow: 0 0 20px 3px red !important;
+}
