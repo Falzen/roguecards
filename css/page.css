@@ -13,14 +13,17 @@ body {
 	padding: 20px 40px;
 	min-height: 400px;
 }
-#hp {
+#stats {
 	position: relative;
-	height: 50px;
-	width: 50px;
-	background-color: pink;
-	font-size: 18px;
-	text-align: center;
-	line-height: 50px;
+}
+#hp {
+height: 30px;
+    width: 150px;
+    /*background: linear-gradient(120deg, red 0%, red 60%, tomato 60%, tomato 100%);*/
+    font-size: 18px;
+    border: 1px solid white;
+    text-align: center;
+    line-height: 30px;
 }
 #def {
 	position: absolute;
@@ -72,6 +75,9 @@ ul.cards-list li {
   margin: 0 4px;
   border: 1px solid grey !important;
 }
+li.nothing .card__face {
+	border-radius: 0px !important;
+}
 
 ul.cards-list li,
 ul.cards-list li img {
@@ -92,7 +98,7 @@ ul.cards-list li img {
 	transform-style: preserve-3d;
 	transition: all 0.4s, box-shadow 0.1s ease;
 }
-.card:not(.nothing):not(.is-flipped):hover {
+li:not(.nothing) .card:not(.is-flipped):hover {
 	box-shadow: 0 0 5px 0px whitesmoke
 }
 
@@ -138,7 +144,9 @@ ul#cards {
 }
 
 .card-container {
+	position: relative;
 	margin: 2px;
+	border-radius: 10px;
 	/*width: 160px;
 	height: 220px;
 	background-color: blue;*/
@@ -176,8 +184,17 @@ ul#cards {
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-start;
+    list-style: none;
+}
+#hand_CardsContainer li {
+	position: relative;
 }
 
 .is_potential_target {
 	box-shadow: 0 0 20px 3px red !important;
+}
+
+.weapon-in-hand {
+    box-shadow: 0px 5px 10px 3px goldenrod;
+    transform: translateY(-10px);
 }
