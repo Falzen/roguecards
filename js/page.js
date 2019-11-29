@@ -360,6 +360,11 @@ function doEnemyAttackByEnemyId(enemyId) {
     var damageFromEnemy = parseInt($('#'+enemyId).find('.attack')[0].textContent);
     settings.hero.hp = parseInt(settings.hero.hp) - damageFromEnemy;
     setHeroHp();
+
+    if(settings.hero.hp <= 0) {
+    	alert('You\'re dead.');
+    	alert('Mwahahaha.');
+    }
 }
 
 
@@ -613,7 +618,7 @@ function setHeroHp() {
 	var percentage = (100*settings.hero.hp) / settings.hero.hpmax;
 	$('#hp').text(settings.hero.hp)
 	.css({
-	    'background': 'linear-gradient(90deg, red 0%, red '+percentage+'%, tomato '+percentage+'%, tomato 100%)'
+	    'background': 'linear-gradient(120deg, red 0%, red '+percentage+'%, tomato '+percentage+'%, tomato 100%)'
 	});
 
 }
