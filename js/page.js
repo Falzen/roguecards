@@ -230,9 +230,17 @@ function cardsClickListener() {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function useItem(item) {
-	var itemName = item.find('.name')[0].textContent;
-	switch(itemName) {
-		case 'heal' :
+	var itemId = item.parent().attr('itemid');
+	switch(itemId) {
+		case 'heal1' :
+			var healAmount = 10;
+			settings.hero.hp = parseInt(settings.hero.hp) + healAmount;
+			setHeroHp();
+			item.parent().addClass('item_is_used');
+			setTimeout(function() {
+				item.parent().remove();
+			}, 300);
+			
 
 		break;
 	}
@@ -452,7 +460,7 @@ function cardDomFactory(data, where) {
 	cardsIdCpt++;
 	switch(data.type) {
 		case 'item':
-			cardHtml += '<li id="cardid_' + cardsIdCpt + '" class="card-container item"';
+			cardHtml += '<li itemid="' + data.id + '" id="cardid_' + cardsIdCpt + '" class="card-container item"';
 			if(data.description) {
 				cardHtml += 'title="' + data.description + '"';
 			}

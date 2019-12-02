@@ -198,3 +198,8 @@ ul#cards {
     box-shadow: 0px 5px 10px 3px goldenrod;
     transform: translateY(-10px);
 }
+
+.item_is_used {
+	
+    box-shadow: 0 0 10px 8px green;
+}
