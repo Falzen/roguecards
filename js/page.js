@@ -19,97 +19,29 @@ if(!settings) {
 	settings = {
 		hero: {},
 		cardsIdCpt: 0,
-		nbCardsInHand: 3
+		nb_CardsInHand_start: 3,
+		nb_CardsInHand_max: 5,
+		floor_level: 1,
+		nb_rooms_per_floor: 12
 	};
 	settings.hero.name = 'NoOne';
 }
-console.log('settings : ', settings);
+
 var is_enemy_visible = false;
 var activeEnemies = [];
-var floor_level = 1;
+
 
 console.log('settings : ', settings);
 
 
 
 var tableSettings = {
-	cardSolts: 12
+	
 };
 
 
 
 var cardsIdCpt = parseInt(settings.cardsIdCpt);
-
-var cardsByTypeMap = new Map();
-var cardsType_items = [
-	{
-		id: 'heal1',
-		type: 'item',
-		name: 'heal',
-		img_name: 'heal1.png',
-		description: 'heals for 10 hp'
-	},
-	/*{
-		id: 'scroll1',
-		type: 'item',
-		name: 'scroll',
-		img_name: 'scroll1.png'
-	}*/
-];
-cardsByTypeMap.set('items', cardsType_items);
-
-var cardsType_enemies = [
-	{
-		id: 'rabite',
-		type: 'enemy',
-		name: 'rabite',
-		img_name: 'rabite.gif',
-		attack: 1,
-		health: 3
-	},
-	{
-		id: 'dinofish',
-		type: 'enemy',
-		name: 'dinofish',
-		img_name: 'dinofish.gif',
-		attack: 2,
-		health: 1
-	},
-	{
-		id: 'beastzombie',
-		type: 'enemy',
-		name: 'beastzombie',
-		img_name: 'beastzombie.gif',
-		attack: 2,
-		health: 5
-	},
-];
-cardsByTypeMap.set('enemies', cardsType_enemies);
-var enemiesByNameMap = new Map();
-for (var i = 0; i < cardsType_enemies.length; i++) {
-	enemiesByNameMap.set(cardsType_enemies[i].name, cardsType_enemies[i]);
-}
-
-var cardsType_weapons = [
-	{
-		id: 'sword1',
-		type: 'weapon',
-		name: 'sword',
-		attack: 2,
-		health: 5,
-		img_name: 'sword1.png'
-	},
-	{
-		id: 'axe1',
-		type: 'weapon',
-		name: 'axe',
-		attack: 5,
-		health: 2,
-		img_name: 'sword1.png'
-	}
-];
-cardsByTypeMap.set('weapons', cardsType_weapons);
-
 
 
 
@@ -148,18 +80,19 @@ function cardsClickListener() {
 		if($(this).parent().hasClass('is-fighting')) {
 			return;
 		}
-
+	
 		// discover
         if(!$(this).hasClass("is-flipped")) {
-        	$(this).addClass("is-flipped");
+        	var clickedCard = $(this);
+        	cardTurningSimpleAnimation(clickedCard);
         	// enemy
-        	if($(this).parent().hasClass("enemy")) {
+        	if(clickedCard.parent().hasClass("enemy")) {
         		is_enemy_visible = true;
         		activeEnemies.push({
         			'id': $(this).parent().attr('id'),
         			'name': $(this).find('.name')[0].textContent
         		});
-        		$(this).parent().addClass('is-fighting');
+        		clickedCard.parent().addClass('is-fighting');
         		endOfTurn('just_discovered_new_enemy');
         	} 
         	else {
@@ -173,12 +106,12 @@ function cardsClickListener() {
     		$(this).hasClass("is-flipped")
     		&& $(this).parent().hasClass("exit")
 		) {
-    		floor_level++;
+    		settings.floor_level++;
 
     		createTable();
-    		alert('floor_level : ' + floor_level);
+    		alert('settings.floor_level : ' + settings.floor_level);
     		// adjusts floor level DOM
-    		$('#lvl .txt')[0].textContent = floor_level;
+    		$('#lvl .txt')[0].textContent = settings.floor_level;
     		endOfTurn();
         	return;
     	}
@@ -343,6 +276,8 @@ function doDamage(victime, damageAmout) {
 }
 
 function endAttack() {
+	endOfTurn();
+
 	// unhighlights enemies
 	for (var i = 0; i < activeEnemies.length; i++) {
 		$('#'+activeEnemies[i].id)
@@ -372,6 +307,7 @@ function doEnemyAttackByEnemyId(enemyId) {
     if(settings.hero.hp <= 0) {
     	alert('You\'re dead.');
     	alert('Mwahahaha.');
+    	window.location.href = 'index.html';
     }
 }
 
@@ -394,16 +330,16 @@ function endOfTurn(what) {
 		}
 
 		if(readyEnemies.length != 0) {
-			doEnemiesdAttacks(readyEnemies, 0);
+			doEnemiesAttacks(readyEnemies, 0);
 		}
 	}
 }
 
-function doEnemiesdAttacks(enemies, cpt) {
+function doEnemiesAttacks(enemies, cpt) {
 	doEnemyAttackByEnemyId(enemies[cpt].id);
 	if(enemies.length > cpt+1) {
 		setTimeout(function() {
-			doEnemiesdAttacks(enemies, ++cpt)
+			doEnemiesAttacks(enemies, ++cpt)
 		}, 200);
 	}
 }
@@ -460,7 +396,7 @@ function cardDomFactory(data, where) {
 	cardsIdCpt++;
 	switch(data.type) {
 		case 'item':
-			cardHtml += '<li itemid="' + data.id + '" id="cardid_' + cardsIdCpt + '" class="card-container item"';
+			cardHtml += '<li itemid="' + data.id + '" id="cardid_' + cardsIdCpt + '" class="card-container item ' + data.name + '"';
 			if(data.description) {
 				cardHtml += 'title="' + data.description + '"';
 			}
@@ -477,8 +413,8 @@ function cardDomFactory(data, where) {
 					cardHtml += '<div class="card__face card__face--back">';
 						cardHtml += '<div class="card-content">';
 							cardHtml += '<img src="img/cards_illus/' + data.img_name +'" />';
+							cardHtml += '<p class="stats">&nbsp;</p>';
 							cardHtml += '<p class="name">' + data.name + '</p>';
-							cardHtml += '<div class="description"></div>';
 						cardHtml += '</div>';
 					cardHtml += '</div>';
 				cardHtml += '</div>';
@@ -505,7 +441,6 @@ function cardDomFactory(data, where) {
 							cardHtml += '<img src="img/cards_illus/' + data.img_name +'" />';
 							cardHtml += '<p class="stats"><span class="attack">' + data.attack + '</span><span class="health">' + data.health + '</span></p>';
 							cardHtml += '<p class="name">' + data.name + '</p>';
-							cardHtml += '<div class="description"></div>';
 						cardHtml += '</div>';
 					cardHtml += '</div>';
 				cardHtml += '</div>';
@@ -552,7 +487,6 @@ function cardDomFactory(data, where) {
 							cardHtml += '<img src="img/cards_illus/' + data.img_name +'" />';
 							cardHtml += '<p class="stats"><span class="attack">' + data.attack + '</span><span class="health">' + data.health + '</span></p>';
 							cardHtml += '<p class="name">' + data.name + '</p>';
-							cardHtml += '<div class="description"></div>';
 						cardHtml += '</div>';
 					cardHtml += '</div>';
 				cardHtml += '</div>';
@@ -572,7 +506,6 @@ function cardDomFactory(data, where) {
 					cardHtml += '<div class="card__face card__face--back">';
 						cardHtml += '<div class="card-content">';
 							cardHtml += '<img src="img/cards_illus/exit.png" />';
-							cardHtml += '<div class="description"></div>';
 						cardHtml += '</div>';
 						cardHtml += '</div>';
 				cardHtml += '</div>';
@@ -652,7 +585,7 @@ function createHand() {
 	var cardsInnerHtml = '';
 	var items = cardsByTypeMap.get('items');
 	var weapons = cardsByTypeMap.get('weapons');
-	for (var i = 0; i < settings.nbCardsInHand-1; i++) {
+	for (var i = 0; i < settings.nb_CardsInHand_start-1; i++) {
 		var oneCard = cardDomFactory(items[getRandomInt(0,items.length-1)], 'hand');
 		cardsInnerHtml += oneCard;
 	}
@@ -671,7 +604,19 @@ function createHand() {
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+function cardTurningSimpleAnimation(card) {
+	card.addClass('is-flipped');
+}
+// check "If fancy animation" in page.css
+function cardTurningFancyAnimation(card) {
+	card.addClass("is_turning");
+	setTimeout(function() {
+		card.removeClass("is_turning").addClass('is_turning_2');
+	}, 150);
+	setTimeout(function() {
+		card.removeClass("is_turning is_turning_2").addClass('is-flipped');
+	}, 400);
+}
 
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min);
