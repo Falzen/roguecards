@@ -16,15 +16,7 @@ var settings = JSON.parse(localStorage.settings);
 
 // settings de secours
 if(!settings) {
-	settings = {
-		hero: {},
-		cardsIdCpt: 0,
-		nb_CardsInHand_start: 3,
-		nb_CardsInHand_max: 5,
-		floor_level: 1,
-		nb_rooms_per_floor: 12
-	};
-	settings.hero.name = 'NoOne';
+	settings = createSettingsByHeroName('Seeryn');
 }
 
 
@@ -109,7 +101,7 @@ function cardsClickListener() {
     		settings.floor_level++;
 
     		createTable();
-    		alert('settings.floor_level : ' + settings.floor_level);
+
     		// adjusts floor level DOM
     		$('#lvl .txt')[0].textContent = settings.floor_level;
     		endOfTurn();
@@ -265,7 +257,7 @@ function doDamage(victime, damageAmout) {
 	if(remainingHealth == 0) {
 		// TODO give XP to player
 		var xpGained = enemiesByNameMap.get(victime[0].dataset.name).xp;
-		settings.hero.currentXp += parseInt(xpGained);
+		setHeroXp(xpGained);
 
 		var victimeId = victime.attr('id');
 		// replaces enemy DOM with "nothing" card
@@ -374,7 +366,9 @@ function makeCardsToGenerate() {
 	theCard = {type: 'nothing'};
 	cardsToGenerate.push(theCard);
 
-	for(var i=0; i<7; i++) {
+	// 1 exit and 4 nothings = for() - 5
+
+	for(var i=0; i<settings.nb_rooms_per_floor-5; i++) {
 		var rand = getRandomInt(1,100);
 		var theCard = {};
 		if(rand <= 60) {
@@ -555,23 +549,42 @@ function cardDomFactory(data, where) {
 
 function setStartingData() {
 	$('#name').text(settings.hero.name);
+	$('#hpMax').text(settings.hero.hpmax);
 	setHeroHp();
 	setHeroDef();
 	$('#lvl .txt').text(1);
 }
+
 function setHeroHp() {
 	var percentage = (100*settings.hero.hp) / settings.hero.hpmax;
-	$('#hp').text(settings.hero.hp)
-	.css({
+	$('#hpValue').text(settings.hero.hp);
+	$('#hp').css({
 	    'background': 'linear-gradient(120deg, red 0%, red '+percentage+'%, tomato '+percentage+'%, tomato 100%)'
 	});
-
 }
 function setHeroDef() {
 	$('#def').text(settings.hero.def);
 	if(settings.hero.def == 0) {
 		$('#def').hide();
 	}
+}
+function setHeroXp(xpGained) {
+	var nextLevelCap = settings.xp_steps[settings.hero.level];
+	settings.hero.currentXp += parseInt(xpGained);
+	if(parseInt(nextLevelCap) <= parseInt(settings.hero.currentXp)) {
+		settings.hero.level++;
+		$('#currentCharLevel').text(settings.hero.level);
+		settings.hero.currentXp -= nextLevelCap;
+	}
+
+	var percentage = (100*settings.hero.currentXp) / nextLevelCap;
+	$('#currentXp').css({
+	    'width': percentage + '%'
+	});
+
+
+
+	$('#currentCharLevel').text(settings.hero.level);
 }
 
 function createTable() {

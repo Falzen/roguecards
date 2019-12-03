@@ -25,46 +25,34 @@
 
 	<!-- Add your site or application content here -->
 	<div id="mainContainer">
-		<div id="charContainer">
-			<div id="you">
-				<p id="name"></p>
-				<div id="stats">
-					<p id="hp"></p>
-					<p id="def"></p>
+		
+		<div id="gameContainer">
+			<div id="charContainer">
+				<div id="you">
+					<p id="name" class="label"></p>
+					<div id="stats">
+						<p id="hp"class="value"><span id="hpValue"></span> / <span id="hpMax"></span></p>
+						<p id="def"class="value"></p>
+					</div>
+					<p class="label">Level&nbsp;<span id="currentCharLevel" class="value">1</span></p>
+					
 				</div>
-			</div>
 
 			
 
-			<div id="lvl">
-				<p>Lvl</p>
-				<p class="txt">1</p>
-			</div>
+				<div id="lvl">
+					<p class="label">Floor&nbsp;<span class="value">1</span></p>
+					
+				</div>
+			</div><!-- end #charContainer -->
 
-		</div><!-- end #charContainer -->
-
-		<div id="cardsContainer">
-			<!-- <table id="cards"></table> -->
 			<ul id="cards">
-<!--
- 				<li class="card-container item">
-					<div class="card">
-						<div class="card__face card__face--front"></div>
-						<div class="card__face card__face--back">
-							<div class="card-content">
-								<p class="name"></p>
-								<div class="description"></div>
-							</div>
-						</div>
-					</div>
-				</li> 
--->
 			</ul>
-		</div>
 
+		</div>
+			
 		<div id="xpContainer">
 			<span id="currentXp"></span>
-			<span id="currentCharLevel"></span>
 		</div>
 
 		<div id="handContainer">
@@ -84,6 +72,7 @@
 	<script src="js/plugins.js"></script>
 	<script src="js/items.js"></script>
 	<script src="js/enemies.js"></script>
+  <script src="js/main.js"></script>
 	<script src="js/page.js"></script>
 
 	<!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
