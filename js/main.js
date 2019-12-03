@@ -12,19 +12,25 @@ var heroes = [
 		name: 'Seeryn',
 		hpmax: 20,
 		hp: 18,
-		def: 0
+		def: 0,
+		currentXp: 0,
+		level: 1
 	},
 	{
 		name: 'Pi',
 		hpmax: 20,
 		hp: 18,
-		def: 0
+		def: 0,
+		currentXp: 0,
+		level: 1
 	},
 	{
 		name: 'Margo',
 		hpmax: 30,
 		hp: 27,
-		def: 0
+		def: 0,
+		currentXp: 0,
+		level: 1
 	}
 ];
 var heroesMapByName = new Map();

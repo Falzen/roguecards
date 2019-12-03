@@ -27,11 +27,11 @@ if(!settings) {
 	settings.hero.name = 'NoOne';
 }
 
+
 var is_enemy_visible = false;
 var activeEnemies = [];
 
 
-console.log('settings : ', settings);
 
 
 
@@ -163,7 +163,7 @@ function cardsClickListener() {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function useItem(item) {
-	var itemId = item.parent().attr('itemid');
+	var itemId = item.parent().attr('data-itemid');
 	switch(itemId) {
 		case 'heal1' :
 			var healAmount = 10;
@@ -263,6 +263,10 @@ function doDamage(victime, damageAmout) {
 	// adjusts enemy's health DOM
 	victime.find('.health')[0].textContent = remainingHealth;
 	if(remainingHealth == 0) {
+		// TODO give XP to player
+		var xpGained = enemiesByNameMap.get(victime[0].dataset.name).xp;
+		settings.hero.currentXp += parseInt(xpGained);
+
 		var victimeId = victime.attr('id');
 		// replaces enemy DOM with "nothing" card
 		victime.replaceWith('<li id="dead_'+victimeId+'" class="card-container nothing"><div class="card nothing board"><div class="card__face card__face--front"></div><div class="card__face card__face--back"><div class="card-content"></div></div></div></li>');
@@ -396,7 +400,7 @@ function cardDomFactory(data, where) {
 	cardsIdCpt++;
 	switch(data.type) {
 		case 'item':
-			cardHtml += '<li itemid="' + data.id + '" id="cardid_' + cardsIdCpt + '" class="card-container item ' + data.name + '"';
+			cardHtml += '<li data-itemid="' + data.id + '" id="cardid_' + cardsIdCpt + '" class="card-container item ' + data.name + '"';
 			if(data.description) {
 				cardHtml += 'title="' + data.description + '"';
 			}
@@ -472,7 +476,7 @@ function cardDomFactory(data, where) {
 		break;
 
 		case 'enemy':
-			cardHtml += '<li id="cardid_' + cardsIdCpt + '" class="card-container enemy"';
+			cardHtml += '<li data-name="' + data.name + '" id="cardid_' + cardsIdCpt + '" class="card-container enemy"';
 			if(data.description) {
 				cardHtml += 'title="' + data.description + '"';
 			}

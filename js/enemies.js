@@ -5,7 +5,8 @@ var cardsType_enemies = [
 		name: 'rabite',
 		img_name: 'rabite.gif',
 		attack: 1,
-		health: 3
+		health: 3,
+		xp: 5
 	},
 	{
 		id: 'dinofish',
@@ -13,7 +14,8 @@ var cardsType_enemies = [
 		name: 'dinofish',
 		img_name: 'dinofish.gif',
 		attack: 2,
-		health: 1
+		health: 1,
+		xp: 4
 	},
 	{
 		id: 'beastzombie',
@@ -21,7 +23,8 @@ var cardsType_enemies = [
 		name: 'beastzombie',
 		img_name: 'beastzombie.gif',
 		attack: 2,
-		health: 5
+		health: 5,
+		xp: 8
 	},
 ];
 cardsByTypeMap.set('enemies', cardsType_enemies);
