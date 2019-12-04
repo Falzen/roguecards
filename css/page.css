@@ -5,9 +5,33 @@ ul {
 	margin: 0;
 	list-style: none;
 }
+.cheat {
+	position: absolute;
+	height: 1rem;
+	width: 1rem;
+	border-radius: 50%;
+	border: 1px solid transparent;
+	transition: all 0.2s ease;
+}
+.cheat:hover {
+	border: 1px solid tomato;
+}
+#wallhack {
+	bottom: 0;
+	left: 0;
+}
+#fullheal {
+	bottom: 0;
+	left: 1rem;
+}
+.wallhack {
+	opacity: 1 !important;
+}
+
+
 
 .card__face--front .name {
-	opacity: 1;
+	opacity: 0;
 	color: white;
 	text-align: center;
 }
@@ -17,6 +41,7 @@ body {
 }
 #mainContainer {
 	/* zoom: 0.9; */
+	position: relative;
 	width: 800px;
 	margin: 0 auto;
 	background-color: black;
@@ -82,10 +107,7 @@ ul.cards-list {
   flex-flow: row nowrap;
   justify-content: center;
 }
-ul.cards-list li {
-  margin: 0 4px;
-  border: 1px solid grey !important;
-}
+
 li.nothing .card__face {
 	/*border-radius: 0px !important;*/
 }
@@ -218,26 +240,31 @@ ul#cards {
 }
 #hand_CardsContainer li {
 	position: relative;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
-
+/* .is-equipable {
+	box-shadow: 0px 5px 10px 3px green;
+} */
+.is-equipable {
+	
+    box-shadow: 0px 0px 6px 1px goldenrod;
+}
 .is_potential_target {
 	box-shadow: 0 0 20px 3px red !important;
 }
 
-.weapon-in-hand {
-    box-shadow: 0px 5px 10px 3px goldenrod;
-    transform: translateY(-10px);
+.weapon-equipped {
+    transform: translateY(-10px) translateZ(30px) rotateZ(185deg);
 }
 
 .item_is_used {
     box-shadow: 0 0 10px 8px green;
 }
 .item {
-	transition: all 0.2s ease;
 }
 .item.heal:hover {
 	box-shadow: 0 0 8px 4px darkgreen;
-	transform: translateY(-20px);
+	/*transform: translateY(-20px);*/
 }
 
 
@@ -267,3 +294,4 @@ ul#cards {
 #currentCharLevel {
 
 }
+

@@ -103,8 +103,25 @@ textarea {
    ========================================================================== */
 
 
+ul#who {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 20px auto;
+  width: 50%;
+}
 
-
+#who li {
+margin-right: 20px;
+flex-grow: 1;
+}
+#who li button {
+    width: 100%;
+    padding: 12px 0;
+}
+#who li:last-child {
+  margin-right: 0;
+}
 
 
 

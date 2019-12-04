@@ -12,6 +12,23 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+$('body').on('click', '.cheat', function (ev) {
+	cheat(ev.currentTarget.id);
+});
+function cheat(name) {
+	switch(name) {
+		case 'wallhack' :
+			$('#cards .card__face--front .name').toggleClass('wallhack');
+		break;
+		case 'fullheal' :
+			settings.hero.hp = settings.hero.hpmax;
+			setHeroHp();
+		break;
+		default:
+		break;
+	}
+}
+
 var settings = JSON.parse(localStorage.settings);
 
 // settings de secours
@@ -65,32 +82,17 @@ function newTurnChecks() {
 
 function cardsClickListener() {
 	$('body').on('click', '.card', function () {
-
 		if($(this).parent().hasClass('nothing')) {
 			return;
 		}
+		// if no weapon equipped
 		if($(this).parent().hasClass('is-fighting')) {
 			return;
 		}
 	
 		// discover
         if(!$(this).hasClass("is-flipped")) {
-        	var clickedCard = $(this);
-        	cardTurningSimpleAnimation(clickedCard);
-        	// enemy
-        	if(clickedCard.parent().hasClass("enemy")) {
-        		is_enemy_visible = true;
-        		activeEnemies.push({
-        			'id': $(this).parent().attr('id'),
-        			'name': $(this).find('.name')[0].textContent
-        		});
-        		clickedCard.parent().addClass('is-fighting');
-        		endOfTurn('just_discovered_new_enemy');
-        	} 
-        	else {
-				endOfTurn();
-        	}
-        	return;
+        	discoverCard($(this));
         }
 
     	// exit
@@ -98,14 +100,7 @@ function cardsClickListener() {
     		$(this).hasClass("is-flipped")
     		&& $(this).parent().hasClass("exit")
 		) {
-    		settings.floor_level++;
-
-    		createTable();
-
-    		// adjusts floor level DOM
-    		$('#lvl .txt')[0].textContent = settings.floor_level;
-    		endOfTurn();
-        	return;
+    		exitFloor();
     	}
 
 		// is FROM hand
@@ -115,13 +110,14 @@ function cardsClickListener() {
 		) {
 			// WEAPON
 			if($(this).parent().hasClass('weapon')) {
-				prepareAttack($(this));
+				if(is_enemy_visible) {
+					prepareAttack($(this));
+				}
 			}
 			// ITEM
 			if($(this).parent().hasClass('item')) {
 				useItem($(this));
 			}
-        	return;
     	}
 
         //take into hand
@@ -132,21 +128,54 @@ function cardsClickListener() {
         	&& $(this).hasClass("is-flipped") // is visible
         	&& $hand[0].childNodes.length < 5 // enough room in hand
 		){
-        	var clickedId = $(this).parent().attr('id');
-        	//TODO $(this).removeClass('board').addClass('hand');
-        	$(this).removeClass('board').addClass('hand');
-        	$(this).parent().clone().appendTo($hand);
-	    	$(this).parent().replaceWith('<li id="old_'+clickedId+'" class="card-container nothing"><div class="card nothing board"><div class="card__face card__face--front"></div><div class="card__face card__face--back"><div class="card-content"></div></div></div></li>');
-	    	endOfTurn();
-	    	return;
+			takeIntoHand($(this));
     	}
-
-
     });
 }
+function discoverCard(clickedCard) {
+	cardTurningSimpleAnimation(clickedCard);
+	// enemy
+	if(clickedCard.parent().hasClass("enemy")) {
+		is_enemy_visible = true;
+		highlightWeaponsInHand();
+		activeEnemies.push({
+			'id': clickedCard.parent().attr('id'),
+			'name': clickedCard.find('.name')[0].textContent
+		});
+		clickedCard.parent().addClass('is-fighting');
+		endOfTurn('just_discovered_new_enemy');
+	} 
+	else {
+		endOfTurn();
+	}
+}
+function exitFloor() {
+	settings.floor_level++;
+	activeEnemies = [];
+	createTable();
 
-
-
+	// adjusts floor level DOM
+	$('#lvl .txt')[0].textContent = settings.floor_level;
+	endOfTurn();
+}
+function takeIntoHand(card) {
+	var clickedId = card.parent().attr('id');
+	card.removeClass('board').addClass('hand');
+	card.parent().clone().appendTo($hand);
+	card.parent().replaceWith('<li id="old_'+clickedId+'" class="card-container nothing"><div class="card nothing board"><div class="card__face card__face--front"></div><div class="card__face card__face--back"><div class="card-content"></div></div></div></li>');
+	if(
+		$('#'+clickedId).hasClass('weapon')
+		&& is_enemy_visible) {
+			highlightWeaponsInHand();
+	}
+	endOfTurn();
+}
+function highlightWeaponsInHand() {
+	$('#hand_CardsContainer .weapon').addClass('is-equipable');
+}
+function unhighlightWeaponsInHand() {
+	$('.is-equipable').removeClass('is-equipable');
+}
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -160,6 +189,7 @@ function useItem(item) {
 		case 'heal1' :
 			var healAmount = 10;
 			settings.hero.hp = parseInt(settings.hero.hp) + healAmount;
+			settings.hero.hp = settings.hero.hp > settings.hero.hpmax ? settings.hero.hpmax : settings.hero.hp;
 			setHeroHp();
 			item.parent().addClass('item_is_used');
 			setTimeout(function() {
@@ -182,9 +212,9 @@ function useItem(item) {
 
 function prepareAttack(whatWith) {
 	// if weapon already equipped
-	if(whatWith.parent().hasClass('weapon-in-hand')) {
+	if(whatWith.parent().hasClass('weapon-equipped')) {
 		// unequips weapon
-		whatWith.parent().removeClass('weapon-in-hand');
+		whatWith.parent().removeClass('weapon-equipped');
 		// unhighlights enemies and removes click listener for attacking them
 		for (var i = 0; i < activeEnemies.length; i++) {
 			$('#'+activeEnemies[i].id)
@@ -195,9 +225,9 @@ function prepareAttack(whatWith) {
 	}
 
 	// unequips all weapons
-	$('.weapon-in-hand').removeClass('weapon-in-hand');
+	$('.weapon-equipped').removeClass('weapon-equipped');
 	// equips selected weapon
-	whatWith.parent().addClass('weapon-in-hand');
+	whatWith.parent().addClass('weapon-equipped');
 	// highlights enemies and adds click listener for attacking them
 	for (var i = 0; i < activeEnemies.length; i++) {
 		$('#'+activeEnemies[i].id)
@@ -220,9 +250,11 @@ function doAttack(whom, whatWith) {
 		top: '-100px'
     }, 120,
     function() {
-        $('#' + weaponId).animate({
-			top: '0',
-		}, 200)
+        $('#' + weaponId).css({
+        	zIndex: '1000'
+        }).animate({
+			top: '0px'
+		}, 200);
     });
 	// deal damages and adjusts weapon after animation completes
 	setTimeout(function() {
@@ -240,7 +272,7 @@ function doAttack(whom, whatWith) {
 		}
 		else {
 			// unequips weapon
-			whatWith.parent().removeClass('weapon-in-hand');
+			whatWith.parent().removeClass('weapon-equipped');
 		}
 		endAttack();
 	}, 300);
@@ -255,18 +287,22 @@ function doDamage(victime, damageAmout) {
 	// adjusts enemy's health DOM
 	victime.find('.health')[0].textContent = remainingHealth;
 	if(remainingHealth == 0) {
-		// TODO give XP to player
+		// XP management
 		var xpGained = enemiesByNameMap.get(victime[0].dataset.name).xp;
 		setHeroXp(xpGained);
-
-		var victimeId = victime.attr('id');
 		// replaces enemy DOM with "nothing" card
+		var victimeId = victime.attr('id');
 		victime.replaceWith('<li id="dead_'+victimeId+'" class="card-container nothing"><div class="card nothing board"><div class="card__face card__face--front"></div><div class="card__face card__face--back"><div class="card-content"></div></div></div></li>');
 		// removes dead enemy from active enemies list
 		for (var i = 0; i < activeEnemies.length; i++) {
 			if(activeEnemies[i].id == victimeId) {
 				activeEnemies.splice(i, 1);
 			}
+		}
+		// end of threat
+		if(activeEnemies.length == 0) {
+			is_enemy_visible = false;
+			unhighlightWeaponsInHand();
 		}
 	}
 }
