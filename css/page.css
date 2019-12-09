@@ -133,7 +133,7 @@ ul.cards-list li img {
 	transition: all 0.4s ease, box-shadow 0.1s ease;
 }
 li:not(.nothing) .card:not(.is-flipped):hover {
-	box-shadow: 0 0 5px 0px goldenrod;
+	box-shadow: 0px 0px 6px -2px white;
 	
 }
 li:not(.nothing):hover > div {
@@ -177,9 +177,26 @@ li:not(.nothing):hover > div {
 }
 
 
-
-
-
+#logContainer {
+    flex-grow: 1;
+    border-left: 1px solid grey;
+    margin-left: 10px;
+    padding-left: 10px;
+    width: 800px;
+}
+#logs {
+    font-size: 13px;
+    line-height: 15px;
+    padding-left: 0px;
+    max-height: 500px;
+    overflow-y: scroll;
+    margin-top: 10px;
+    height: 100%;
+}
+li.log {
+    color: rgb(190,190,190);
+    margin-bottom: 10px;
+}
 
 
 
@@ -189,7 +206,7 @@ ul#cards {
 	justify-content: center;
     list-style: none;
     padding: 0;
-    max-width: 500px;
+    
 }
 
 .card-container {
@@ -237,6 +254,7 @@ ul#cards {
     flex-flow: row nowrap;
     justify-content: flex-start;
     list-style: none;
+    padding: 0;
 }
 #hand_CardsContainer li {
 	position: relative;

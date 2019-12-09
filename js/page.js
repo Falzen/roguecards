@@ -40,7 +40,7 @@ if(!settings) {
 var is_enemy_visible = false;
 var activeEnemies = [];
 
-
+var logs = $('#logs');
 
 
 
@@ -151,11 +151,9 @@ function discoverCard(clickedCard) {
 }
 function exitFloor() {
 	settings.floor_level++;
+	setFloor();
 	activeEnemies = [];
 	createTable();
-
-	// adjusts floor level DOM
-	$('#lvl .txt')[0].textContent = settings.floor_level;
 	endOfTurn();
 }
 function takeIntoHand(card) {
@@ -286,7 +284,12 @@ function doDamage(victime, damageAmout) {
 	}
 	// adjusts enemy's health DOM
 	victime.find('.health')[0].textContent = remainingHealth;
+	// if killing blow
 	if(remainingHealth == 0) {
+		var lg = {
+			'txt': 'Bang! '+victime[0].dataset.name+' is dead.'
+		};
+		createLog(lg);
 		// XP management
 		var xpGained = enemiesByNameMap.get(victime[0].dataset.name).xp;
 		setHeroXp(xpGained);
@@ -621,6 +624,9 @@ function setHeroXp(xpGained) {
 
 
 	$('#currentCharLevel').text(settings.hero.level);
+}
+function setFloor() {
+	$('#currentFloor').text(settings.floor_level);
 }
 
 function createTable() {

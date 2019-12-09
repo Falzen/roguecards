@@ -11,8 +11,8 @@
 	<link rel="apple-touch-icon" href="icon.png">
 	<!-- Place favicon.ico in the root directory -->
 
-	<link rel="stylesheet" href="css/normalize.css">
-	<link rel="stylesheet" href="css/main.css">
+	<!-- <link rel="stylesheet" href="css/normalize.css"> -->
+	<!-- <link rel="stylesheet" href="css/main.css"> -->
 	<link rel="stylesheet" href="css/page.css">
 
 	<meta name="theme-color" content="#fafafa">
@@ -28,6 +28,26 @@
 		<div class="cheat" id="wallhack" title="wallhack"></div>
 		<div class="cheat" id="fullheal" title="fullheal"></div>
 		<div id="gameContainer">
+
+			<ul id="cards">
+			</ul>
+
+			<div id="logContainer">
+				<ul id="logs">
+				</ul>
+			</div>
+		</div>
+			
+		<div id="xpContainer">
+			<span id="currentXp"></span>
+		</div>
+
+		<div id="handContainer">
+			<ul id="hand_CardsContainer">
+				
+			</ul>
+		</div>
+
 			<div id="charContainer">
 				<div id="you">
 					<p id="name" class="label"></p>
@@ -42,26 +62,10 @@
 			
 
 				<div id="lvl">
-					<p class="label">Floor&nbsp;<span class="value">1</span></p>
+					<p class="label">Floor&nbsp;<span id="currentFloor" class="value">1</span></p>
 					
 				</div>
 			</div><!-- end #charContainer -->
-
-			<ul id="cards">
-			</ul>
-
-		</div>
-			
-		<div id="xpContainer">
-			<span id="currentXp"></span>
-		</div>
-
-		<div id="handContainer">
-			<ul id="hand_CardsContainer">
-				
-			</ul>
-		</div>
-
 
 	</div><!-- end #mainContainer -->
 
@@ -73,7 +77,8 @@
 	<script src="js/plugins.js"></script>
 	<script src="js/items.js"></script>
 	<script src="js/enemies.js"></script>
-  <script src="js/main.js"></script>
+	<script src="js/logs.js"></script>
+  	<script src="js/main.js"></script>
 	<script src="js/page.js"></script>
 
 	<!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
