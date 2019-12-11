@@ -1,6 +1,5 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 					--- Lexicon ---
 
 	- make...:
@@ -8,9 +7,9 @@
 
 	- create...:
 		is to (possibly make and) actually insert new DOM into the page.
-*/
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 $('body').on('click', '.cheat', function (ev) {
 	cheat(ev.currentTarget.id);
@@ -29,37 +28,31 @@ function cheat(name) {
 	}
 }
 
-var settings = JSON.parse(localStorage.settings);
 
-// settings de secours
-if(!settings) {
-	settings = createSettingsByHeroName('Seeryn');
-}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
+		Ready --ready
 
-var is_enemy_visible = false;
-var activeEnemies = [];
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 	var settings = JSON.parse(localStorage.settings);
+	if(!settings) { // settings de secours
+		settings = createSettingsByHeroName('Seeryn');
+	}
+	var is_enemy_visible = false;
+	var activeEnemies = [];
+	var logs = $('#logs');
+	var tableSettings = {
 
-var logs = $('#logs');
-
-
-
-var tableSettings = {
-	
-};
-
-
-
-var cardsIdCpt = parseInt(settings.cardsIdCpt);
-
-
-
-
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+	};
+	var cardsIdCpt = parseInt(settings.cardsIdCpt);
+	var $hand = $("#hand_CardsContainer");
 $(document).ready(function() {
+
+
+
+
 	setStartingData();
 	createTable();
 	createHand();
@@ -68,18 +61,14 @@ $(document).ready(function() {
 });
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var $hand = $("#hand_CardsContainer");
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-function newTurnChecks() {
-	if(is_enemy_visible) {
+		Click listeners --listeners
 
-	}
-}
-
-
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function cardsClickListener() {
 	$('body').on('click', '.card', function () {
 		if($(this).parent().hasClass('nothing')) {
@@ -174,13 +163,14 @@ function highlightWeaponsInHand() {
 function unhighlightWeaponsInHand() {
 	$('.is-equipable').removeClass('is-equipable');
 }
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Items function
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function useItem(item) {
 	var itemId = item.parent().attr('data-itemid');
 	switch(itemId) {
@@ -193,21 +183,18 @@ function useItem(item) {
 			setTimeout(function() {
 				item.parent().remove();
 			}, 300);
-			
-
 		break;
 	}
 
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Attack function
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function prepareAttack(whatWith) {
 	// if weapon already equipped
 	if(whatWith.parent().hasClass('weapon-equipped')) {
@@ -236,8 +223,6 @@ function prepareAttack(whatWith) {
 		});
 	}
 }
-
-
 function doAttack(whom, whatWith) {
 	var durability = whatWith.find('.health')[0].textContent;
 	// animation
@@ -275,7 +260,6 @@ function doAttack(whom, whatWith) {
 		endAttack();
 	}, 300);
 }
-
 function doDamage(victime, damageAmout) {
 	var victimeHealth = parseInt(victime.find('.health')[0].textContent);
 	var remainingHealth = victimeHealth - parseInt(damageAmout);
@@ -309,7 +293,6 @@ function doDamage(victime, damageAmout) {
 		}
 	}
 }
-
 function endAttack() {
 	endOfTurn();
 
@@ -320,7 +303,6 @@ function endAttack() {
 			.off('click');
 	}
 }
-
 function doEnemyAttackByEnemyId(enemyId) {
 	// animation
     $('#'+enemyId).css({
@@ -347,14 +329,14 @@ function doEnemyAttackByEnemyId(enemyId) {
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// checks
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function endOfTurn(what) {
 	if(is_enemy_visible) {
 		var readyEnemies = [];
@@ -369,7 +351,6 @@ function endOfTurn(what) {
 		}
 	}
 }
-
 function doEnemiesAttacks(enemies, cpt) {
 	doEnemyAttackByEnemyId(enemies[cpt].id);
 	if(enemies.length > cpt+1) {
@@ -379,14 +360,14 @@ function doEnemiesAttacks(enemies, cpt) {
 	}
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Cards factories
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function makeCardsToGenerate() {
 	var cardsToGenerate = [];
 
@@ -410,10 +391,10 @@ function makeCardsToGenerate() {
 	for(var i=0; i<settings.nb_rooms_per_floor-5; i++) {
 		var rand = getRandomInt(1,100);
 		var theCard = {};
-		if(rand <= 60) {
+		if(rand <= 30) {
 			theCard = enemies[getRandomInt(0, enemies.length-1)]
 		}
-		if(rand > 60 && rand <= 99) {
+		if(rand > 30 && rand <= 99) {
 			theCard = weapons[getRandomInt(0, weapons.length-1)]
 		}
 		else {
@@ -425,8 +406,6 @@ function makeCardsToGenerate() {
 	cardsToGenerate.sort(function() { return 0.5 - Math.random() });
 	return cardsToGenerate;
 }
-
-
 function cardDomFactory(data, where) {
 	where = where != undefined ? where : 'board';
 	var cardHtml = '';
@@ -578,14 +557,14 @@ function cardDomFactory(data, where) {
 	return cardHtml;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Start function
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function setStartingData() {
 	$('#name').text(settings.hero.name);
 	$('#hpMax').text(settings.hero.hpmax);
@@ -593,7 +572,41 @@ function setStartingData() {
 	setHeroDef();
 	$('#lvl .txt').text(1);
 }
+function createTable() {
+	$('#cards').html('');
+	var cardsInnerHtml = '';
+	var cards = makeCardsToGenerate();
+	for (var i = 0; i < cards.length; i++) {
+		var oneCard = cardDomFactory(cards[i]);
+		cardsInnerHtml += oneCard;
+	}
+	$('#cards').html(cardsInnerHtml);
+}
+function createHand() {
+	var cardsInnerHtml = '';
+	var items = cardsByTypeMap.get('items');
+	var weapons = cardsByTypeMap.get('weapons');
+	for (var i = 0; i < settings.nb_CardsInHand_start-1; i++) {
+		var oneCard = cardDomFactory(items[getRandomInt(0,items.length-1)], 'hand');
+		cardsInnerHtml += oneCard;
+	}
 
+	var temp = cardDomFactory(weapons[getRandomInt(0,weapons.length-1)], 'hand');
+	cardsInnerHtml += temp;
+	
+	$('#hand_CardsContainer').html(cardsInnerHtml);
+}
+
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		Setters --setters
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function setHeroHp() {
 	var percentage = (100*settings.hero.hp) / settings.hero.hpmax;
 	$('#hpValue').text(settings.hero.hp);
@@ -615,54 +628,24 @@ function setHeroXp(xpGained) {
 		$('#currentCharLevel').text(settings.hero.level);
 		settings.hero.currentXp -= nextLevelCap;
 	}
-
 	var percentage = (100*settings.hero.currentXp) / nextLevelCap;
 	$('#currentXp').css({
 	    'width': percentage + '%'
 	});
-
-
-
 	$('#currentCharLevel').text(settings.hero.level);
 }
 function setFloor() {
 	$('#currentFloor').text(settings.floor_level);
 }
 
-function createTable() {
-	$('#cards').html('');
-	var cardsInnerHtml = '';
-	var cards = makeCardsToGenerate();
-	for (var i = 0; i < cards.length; i++) {
-		var oneCard = cardDomFactory(cards[i]);
-		cardsInnerHtml += oneCard;
-	}
-	$('#cards').html(cardsInnerHtml);
-}
 
-function createHand() {
-	var cardsInnerHtml = '';
-	var items = cardsByTypeMap.get('items');
-	var weapons = cardsByTypeMap.get('weapons');
-	for (var i = 0; i < settings.nb_CardsInHand_start-1; i++) {
-		var oneCard = cardDomFactory(items[getRandomInt(0,items.length-1)], 'hand');
-		cardsInnerHtml += oneCard;
-	}
-
-	var temp = cardDomFactory(weapons[getRandomInt(0,weapons.length-1)], 'hand');
-	cardsInnerHtml += temp;
-	
-	$('#hand_CardsContainer').html(cardsInnerHtml);
-}
-
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Utils
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function cardTurningSimpleAnimation(card) {
 	card.addClass('is-flipped');
 }
@@ -676,13 +659,8 @@ function cardTurningFancyAnimation(card) {
 		card.removeClass("is_turning is_turning_2").addClass('is-flipped');
 	}, 400);
 }
-
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function pickUpCard() {
-
 }
 
 
@@ -690,10 +668,6 @@ function pickUpCard() {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*
 					--- Documentation ---
-
-newTurnChecks() //TODO
-	Peut-être rien, beaucoup est déjà vérifié dans endOfTurn(what).
-
 
 cardsClickListener()
 

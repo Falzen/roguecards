@@ -34,6 +34,118 @@ var cardsType_weapons = [
 		attack: 5,
 		health: 2,
 		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
+	},
+	{
+		id: 'fireball1',
+		type: 'magic',
+		name: 'fireball',
+		attack: 8,
+		health: 1,
+		img_name: 'sword1.png'
 	}
 ];
 cardsByTypeMap.set('weapons', cardsType_weapons);
