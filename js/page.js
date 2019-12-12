@@ -385,16 +385,16 @@ function makeCardsToGenerate() {
 	cardsToGenerate.push(theCard);
 	theCard = {type: 'nothing'};
 	cardsToGenerate.push(theCard);
-
+	console.log('weapons : ', weapons);
 	// 1 exit and 4 nothings = for() - 5
 
 	for(var i=0; i<settings.nb_rooms_per_floor-5; i++) {
 		var rand = getRandomInt(1,100);
 		var theCard = {};
-		if(rand <= 30) {
+		if(rand <= 450) {
 			theCard = enemies[getRandomInt(0, enemies.length-1)]
 		}
-		if(rand > 30 && rand <= 99) {
+		if(rand > 45 && rand <= 99) {
 			theCard = weapons[getRandomInt(0, weapons.length-1)]
 		}
 		else {
@@ -438,6 +438,32 @@ function cardDomFactory(data, where) {
 		break;
 		
 		case 'weapon':
+			cardHtml += '<li id="cardid_' + cardsIdCpt + '" class="card-container weapon"';
+			if(data.description) {
+				cardHtml += 'title="' + data.description + '"';
+			}
+			cardHtml += '>';
+			
+				cardHtml += '<div class="card ' + where;
+				if(where == 'hand') {
+					cardHtml += ' is-flipped';
+				}
+				cardHtml += '">';
+					cardHtml += '<div class="card__face card__face--front">';
+							cardHtml += '<p class="name">' + data.name + '</p>';
+					cardHtml += '</div>';
+					cardHtml += '<div class="card__face card__face--back">';
+						cardHtml += '<div class="card-content">';
+							cardHtml += '<img src="img/cards_illus/' + data.img_name +'" />';
+							cardHtml += '<p class="stats"><span class="attack">' + data.attack + '</span><span class="health">' + data.health + '</span></p>';
+							cardHtml += '<p class="name">' + data.name + '</p>';
+						cardHtml += '</div>';
+					cardHtml += '</div>';
+				cardHtml += '</div>';
+			cardHtml += '</li>';
+		break;
+		
+		case 'magic':
 			cardHtml += '<li id="cardid_' + cardsIdCpt + '" class="card-container weapon"';
 			if(data.description) {
 				cardHtml += 'title="' + data.description + '"';
