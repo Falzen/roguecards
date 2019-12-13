@@ -349,6 +349,9 @@ li.log {
 .weapon-equipped {
     transform: translateY(-10px) translateZ(30px) rotateZ(185deg);
 }
+.card-equipped {
+    transform: translateY(-50px) translateZ(50px) rotateZ(-2deg);
+}
 .item_is_used {
     box-shadow: 0 0 10px 8px green;
 }

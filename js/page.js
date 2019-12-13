@@ -41,6 +41,8 @@ function cheat(name) {
 		settings = createSettingsByHeroName('Seeryn');
 	}
 	var is_enemy_visible = false;
+	var is_card_equipped = false;
+	var card_equipped_id = null;
 	var activeEnemies = [];
 	var logs = $('#logs');
 	var tableSettings = {
@@ -71,6 +73,7 @@ $(document).ready(function() {
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 function cardsClickListener() {
 	$('body').on('click', '.card', function () {
+
 		if($(this).parent().hasClass('nothing')) {
 			return;
 		}
@@ -78,10 +81,15 @@ function cardsClickListener() {
 		if($(this).parent().hasClass('is-fighting')) {
 			return;
 		}
-	
+
+		// switch with equipped card
+		// if(card_equipped_id) {
+		// 	swapCardsByDomId(card_equipped_id, $(this).parent()[0].id);
+		// }
+
 		// discover
         if(!$(this).hasClass("is-flipped")) {
-        	discoverCard($(this));
+        	discoverCard($(this), true);
         }
 
     	// exit
@@ -102,6 +110,9 @@ function cardsClickListener() {
 				if(is_enemy_visible) {
 					prepareAttack($(this));
 				}
+				/*else{
+					selectCard($(this));
+				}*/
 			}
 			// ITEM
 			if($(this).parent().hasClass('item')) {
@@ -121,8 +132,8 @@ function cardsClickListener() {
     	}
     });
 }
-function discoverCard(clickedCard) {
-	cardTurningSimpleAnimation(clickedCard);
+function discoverCard(clickedCard, isClicked) {
+	cardTurningSimpleAnimation(clickedCard); // transition: all 0.4s ease
 	// enemy
 	if(clickedCard.parent().hasClass("enemy")) {
 		is_enemy_visible = true;
@@ -132,7 +143,57 @@ function discoverCard(clickedCard) {
 			'name': clickedCard.find('.name')[0].textContent
 		});
 		clickedCard.parent().addClass('is-fighting');
-		endOfTurn('just_discovered_new_enemy');
+
+		// get possible adjacent ids
+		var thisId = parseInt(clickedCard.parent()[0].id.split('_')[1]);
+		var adjacentCardsId = {
+			up: thisId-4 > 0 ? 'cardid_'+(thisId-4) : null,
+			right: thisId+1 <= settings.nb_rooms_per_floor ? 'cardid_'+(thisId+1) : null,
+			down: thisId+4 <= settings.nb_rooms_per_floor ? 'cardid_'+(thisId+4) : null,
+			left: thisId-1 > 0 ? 'cardid_'+(thisId-1) : null
+		}
+		console.log('adjacentCardsId : ', adjacentCardsId);
+
+		// TODO attention aux retours à la ligne quand on vérifie !
+		// check for enemies and show them too
+		if(isClicked) {
+			if(
+				adjacentCardsId.up
+				&& !$('#'+adjacentCardsId.up).hasClass('nothing')
+				//&& $('#'+adjacentCardsId.up).hasClass('enemy')
+			) {
+				var clickableCard = $('#'+adjacentCardsId.up).find('.card');
+				discoverCard(clickableCard, false);
+			}
+			if(
+				adjacentCardsId.right
+				&& !$('#'+adjacentCardsId.right).hasClass('nothing')
+				//&& $('#'+adjacentCardsId.right).hasClass('enemy')
+			) {
+				var clickableCard = $('#'+adjacentCardsId.right).find('.card');
+				discoverCard(clickableCard, false);
+			}
+			if(
+				adjacentCardsId.down
+				&& !$('#'+adjacentCardsId.down).hasClass('nothing')
+				//&& $('#'+adjacentCardsId.down).hasClass('enemy')
+			) {
+				var clickableCard = $('#'+adjacentCardsId.down).find('.card');
+				discoverCard(clickableCard, false);
+			}
+			if(
+				adjacentCardsId.left
+				&& !$('#'+adjacentCardsId.left).hasClass('nothing')
+				//&& $('#'+adjacentCardsId.left).hasClass('enemy')
+			) {
+				var clickableCard = $('#'+adjacentCardsId.left).find('.card');
+				discoverCard(clickableCard, false);
+			}
+		}
+			endOfTurn('just_discovered_new_enemy');
+
+
+
 	} 
 	else {
 		endOfTurn();
@@ -185,9 +246,26 @@ function useItem(item) {
 			}, 300);
 		break;
 	}
-
 }
 
+function selectCard(card) {
+	// if weapon already equipped
+	if(card.parent().hasClass('card-equipped')) {
+		// unequips weapon
+		card.parent().removeClass('card-equipped');
+		is_card_equipped = false;
+		card_equipped_id = null;
+		return;
+	}
+	$('.card-equipped').removeClass('card-equipped');
+
+	card.parent().addClass('card-equipped');
+	is_card_equipped = true;
+	card_equipped_id = card.parent()[0].id;
+}
+
+function swapCardsByDomId(handCardId, roomCardId) {
+}
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -391,10 +469,10 @@ function makeCardsToGenerate() {
 	for(var i=0; i<settings.nb_rooms_per_floor-5; i++) {
 		var rand = getRandomInt(1,100);
 		var theCard = {};
-		if(rand <= 450) {
+		if(rand <= 70) {
 			theCard = enemies[getRandomInt(0, enemies.length-1)]
 		}
-		if(rand > 45 && rand <= 99) {
+		if(rand > 70 && rand <= 99) {
 			theCard = weapons[getRandomInt(0, weapons.length-1)]
 		}
 		else {
@@ -612,13 +690,16 @@ function createHand() {
 	var cardsInnerHtml = '';
 	var items = cardsByTypeMap.get('items');
 	var weapons = cardsByTypeMap.get('weapons');
-	for (var i = 0; i < settings.nb_CardsInHand_start-1; i++) {
+	/*for (var i = 0; i < settings.nb_CardsInHand_start-1; i++) {
 		var oneCard = cardDomFactory(items[getRandomInt(0,items.length-1)], 'hand');
 		cardsInnerHtml += oneCard;
-	}
+	}*/
 
-	var temp = cardDomFactory(weapons[getRandomInt(0,weapons.length-1)], 'hand');
-	cardsInnerHtml += temp;
+	var oneCard = cardDomFactory(items[getRandomInt(0,items.length-1)], 'hand');
+	cardsInnerHtml += oneCard;
+
+	var oneCard = cardDomFactory(weapons[getRandomInt(0,weapons.length-1)], 'hand');
+	cardsInnerHtml += oneCard;
 	
 	$('#hand_CardsContainer').html(cardsInnerHtml);
 }
