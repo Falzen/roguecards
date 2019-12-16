@@ -51,10 +51,6 @@ function cheat(name) {
 	var cardsIdCpt = parseInt(settings.cardsIdCpt);
 	var $hand = $("#hand_CardsContainer");
 $(document).ready(function() {
-
-
-
-
 	setStartingData();
 	createTable();
 	createHand();
@@ -140,7 +136,8 @@ function discoverCard(clickedCard, isClicked) {
 		highlightWeaponsInHand();
 		activeEnemies.push({
 			'id': clickedCard.parent().attr('id'),
-			'name': clickedCard.find('.name')[0].textContent
+			'name': clickedCard.find('.name')[0].textContent,
+			'just_discovered': true
 		});
 		clickedCard.parent().addClass('is-fighting');
 
@@ -160,7 +157,7 @@ function discoverCard(clickedCard, isClicked) {
 			if(
 				adjacentCardsId.up
 				&& !$('#'+adjacentCardsId.up).hasClass('nothing')
-				//&& $('#'+adjacentCardsId.up).hasClass('enemy')
+				&& $('#'+adjacentCardsId.up).hasClass('enemy')
 			) {
 				var clickableCard = $('#'+adjacentCardsId.up).find('.card');
 				discoverCard(clickableCard, false);
@@ -168,7 +165,7 @@ function discoverCard(clickedCard, isClicked) {
 			if(
 				adjacentCardsId.right
 				&& !$('#'+adjacentCardsId.right).hasClass('nothing')
-				//&& $('#'+adjacentCardsId.right).hasClass('enemy')
+				&& $('#'+adjacentCardsId.right).hasClass('enemy')
 			) {
 				var clickableCard = $('#'+adjacentCardsId.right).find('.card');
 				discoverCard(clickableCard, false);
@@ -176,7 +173,7 @@ function discoverCard(clickedCard, isClicked) {
 			if(
 				adjacentCardsId.down
 				&& !$('#'+adjacentCardsId.down).hasClass('nothing')
-				//&& $('#'+adjacentCardsId.down).hasClass('enemy')
+				&& $('#'+adjacentCardsId.down).hasClass('enemy')
 			) {
 				var clickableCard = $('#'+adjacentCardsId.down).find('.card');
 				discoverCard(clickableCard, false);
@@ -184,17 +181,14 @@ function discoverCard(clickedCard, isClicked) {
 			if(
 				adjacentCardsId.left
 				&& !$('#'+adjacentCardsId.left).hasClass('nothing')
-				//&& $('#'+adjacentCardsId.left).hasClass('enemy')
+				&& $('#'+adjacentCardsId.left).hasClass('enemy')
 			) {
 				var clickableCard = $('#'+adjacentCardsId.left).find('.card');
 				discoverCard(clickableCard, false);
 			}
 		}
-			endOfTurn('just_discovered_new_enemy');
-
-
-
-	} 
+		endOfTurn();
+	}
 	else {
 		endOfTurn();
 	}
@@ -420,17 +414,19 @@ function endOfTurn(what) {
 		var readyEnemies = [];
 		readyEnemies = readyEnemies.concat(activeEnemies);
 
-		if(what == 'just_discovered_new_enemy') {
-			readyEnemies.length = readyEnemies.length-1;
-		}
-
 		if(readyEnemies.length != 0) {
 			doEnemiesAttacks(readyEnemies, 0);
 		}
 	}
 }
 function doEnemiesAttacks(enemies, cpt) {
-	doEnemyAttackByEnemyId(enemies[cpt].id);
+	if(!enemies[cpt].just_discovered) {
+		doEnemyAttackByEnemyId(enemies[cpt].id);	
+	}
+	else {
+		enemies[cpt].just_discovered = false;
+	}
+	
 	if(enemies.length > cpt+1) {
 		setTimeout(function() {
 			doEnemiesAttacks(enemies, ++cpt)
