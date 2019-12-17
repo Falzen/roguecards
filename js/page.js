@@ -28,7 +28,6 @@ function cheat(name) {
 	}
 }
 
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -50,13 +49,14 @@ function cheat(name) {
 	};
 	var cardsIdCpt = parseInt(settings.cardsIdCpt);
 	var $hand = $("#hand_CardsContainer");
-$(document).ready(function() {
-	setStartingData();
-	createTable();
-	createHand();
-	cardsClickListener();
+	$(document).ready(function() {
+		setStartingData();
+		createTable();
+		createHand();
+		cardsClickListener();
+cheat('wallhack');
 
-});
+	});
 
 
 
@@ -465,10 +465,10 @@ function makeCardsToGenerate() {
 	for(var i=0; i<settings.nb_rooms_per_floor-5; i++) {
 		var rand = getRandomInt(1,100);
 		var theCard = {};
-		if(rand <= 70) {
+		if(rand <= 80) {
 			theCard = enemies[getRandomInt(0, enemies.length-1)]
 		}
-		if(rand > 70 && rand <= 99) {
+		if(rand > 80 && rand <= 100) {
 			theCard = weapons[getRandomInt(0, weapons.length-1)]
 		}
 		else {
