@@ -187,10 +187,15 @@ function discoverCard(clickedCard, isClicked) {
 				discoverCard(clickableCard, false);
 			}
 		}
-		endOfTurn();
+		// shouldn't do attacks checks if enemy was discovered "by accident"
+		if(isClicked == true) {
+			endOfTurn();
+		}
 	}
 	else {
-		endOfTurn();
+		if(isClicked == true) {
+			endOfTurn();
+		}
 	}
 }
 function exitFloor() {
@@ -420,6 +425,7 @@ function endOfTurn(what) {
 	}
 }
 function doEnemiesAttacks(enemies, cpt) {
+	debugger;
 	if(!enemies[cpt].just_discovered) {
 		doEnemyAttackByEnemyId(enemies[cpt].id);	
 	}
